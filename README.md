@@ -122,5 +122,14 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/s
 minikube addons enable dashboard
 #output
 #dashboard was successfully enabled
-
 ```
+In separate **PowerShell** window run code for dashboard proxy
+```powershell
+kubectl proxy --port=7845
+#output
+#Starting to serve on 127.0.0.1:7845
+```
+If you will open your browser and enter [127.0.0.1:7845](http://127.0.0.1:7845/) you will find list of acceptable Api Requests.
+
+You could try **/logs** or **/healthz/ping** for example.
+
