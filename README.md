@@ -38,18 +38,28 @@ Minikube supports multiple versions of Kubernetes. To check out the different ve
 ```powershell
 minikube get-k8s-versions
 ```
+#Configuring Hyper-V
+
+Find existing network adapters by running the **Get-NetAdapter**. Make a note of the network adapter name that you want to use for the virtual switch. 
+```powershell
+Get-NetAdapter 
+```
+Create a virtual switch by using the **New-VMSwitch**. For example, to create an external virtual switch named **ExternalSwitch**, using the ethernet network adapter, and with **Allow management operating system to share this network adapter** turned on, run the following command
+```powershell
+New-VMSwitch -name ExternalSwitch  -NetAdapterName Ethernet -AllowManagementOS $true  
+```
+To create an internal switch, run the following command. 
+```powershell
+New-VMSwitch -name InternalSwitch -SwitchType Internal  
+```
+To create an private switch, run the following command. 
+```powershell
+New-VMSwitch -name PrivateSwitch -SwitchType Private 
+```
 #Starting our Cluster
 
 We are now ready to launch our Kubernetes cluster locally. We will use the start command for it.  
 ```powershell
-minikube.exe start --kubernetes-version="v1.10.0" --vm-driver="virtualbox" --alsologtostderr
+minikube start --vm-driver=hyperv --kubernetes-version="v1.10.0" --hyperv-virtual-switch "ExternalSwitch" --alsologtostderr
 ```
 
-**_If you have enabled Hyper-V you will get an exception:_**
-```
-This computer is running Hyper-V. VirtualBox won't boot a 64bits VM when Hyper-V is activated. Either use Hyper-V as a driver, or disable the Hyper-V hypervisor. (To skip this check, use --virtualbox-no-vtx-check)
-```
-So, as you can see in error description we could run it with Hyper-V engine:
-```powershell
-minikube.exe start --kubernetes-version="v1.10.0" --vm-driver="hyperv" --alsologtostderr
-```
