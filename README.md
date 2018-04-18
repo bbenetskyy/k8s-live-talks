@@ -1,7 +1,7 @@
 # k8s-live-talks
 Simple K8s Demo project
 
-#Installing.
+# Installing.
 
 You could download and install **minikube** from [Minikube Releases](https://github.com/kubernetes/minikube/releases) or by command at **PowerShell**.
 
@@ -16,6 +16,35 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.We
 #output
 #Chocolatey (choco.exe) is now ready.
 #You may need to shut down and restart powershell and/or consoles first prior to using choco.
+```
+Let's **search** at **choco** for all packages connected with **minikube**
+```powershell
+choco search kube
+#output
+#Chocolatey v0.10.10
+#kubernetes-cli 1.10.1 [Approved]
+#Minikube 0.26.0 [Approved]
+#kubernetes-node 1.10.0 [Approved] Downloads cached for licensed users
+#kubernetes-kompose 1.11.0 [Approved]
+#juju 2.3.5 [Approved]
+#kubernetes-helm 2.8.2 [Approved] Downloads cached for licensed users
+#openshift-cli 3.9.0 [Approved]
+#minishift 1.15.1 [Approved]
+#kubeval 0.7.0 [Approved] Downloads cached for licensed users
+#faas-cli 0.5.0 [Approved] Downloads cached for licensed users
+#10 packages found.
+```
+From that list we need to install 
+* Minikube
+* kubernetes-cli*
+* kubernetes-node
+* ubernetes-kompos
+
+*Please note that package **kubernetes-cli** will be installed with **Minilube**.
+```powershell
+choco install minikube
+choco install kubernetes-node
+choco install kubernetes-kompose
 ```
 Right now with last version **v0.26.0** we have an issue - [Error with pre-create check. When Creating a new docker machine](https://github.com/docker/machine/issues/4452)
 Just rollback to **v0.25.0** with _--allow-downgrade_
@@ -45,7 +74,7 @@ Minikube supports multiple versions of Kubernetes. To check out the different ve
 ```powershell
 minikube get-k8s-versions
 ```
-#Configuring Hyper-V
+# Configuring Hyper-V
 
 Find existing network adapters by running the **Get-NetAdapter**. Make a note of the network adapter name that you want to use for the virtual switch. 
 ```powershell
@@ -79,7 +108,7 @@ To create an private switch, run the following command.
 ```powershell
 New-VMSwitch -name PrivateSwitch -SwitchType Private 
 ```
-#Starting our Cluster
+# Starting our Cluster
 
 We are now ready to launch our Kubernetes cluster locally. We will use the start command for it.  
 ```powershell
@@ -98,6 +127,9 @@ For check it we will try to get active nodes adn pods.
  #output
  #NAMESPACE     NAME                          READY     STATUS    RESTARTS   AGE
  #kube-system   kube-addon-manager-minikube   1/1       Running   1          16m
+ kubectl cluster-info
+ #output
+ #Kubernetes master is running at https://10.10.34.139:8443
 ```
 You can stop **Minikube** by simple stop **command**
 ```powershell
@@ -106,8 +138,7 @@ You can stop **Minikube** by simple stop **command**
  #Stopping local Kubernetes cluster...
  #Machine stopped.
 ```
-
-#Dashboard
+# Dashboard
 From this moment we could see **Minikube Dashboard**, right now it's empty. But later here we will see all details about internal live of our **K8s**.
 
 ```powershell
