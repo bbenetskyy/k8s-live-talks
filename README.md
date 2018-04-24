@@ -41,11 +41,19 @@ From that list we need to install
 * ubernetes-kompos
 
 *Please note that package **kubernetes-cli** will be installed with **Minilube**.
+
+But we will start by installing **docker** as first package:
 ```powershell
-choco install minikube
-choco install kubernetes-node
-choco install kubernetes-kompose
+choco install docker -y
+choco install minikube -y
+choco install kubernetes-node -y
+choco install kubernetes-kompose -y
 ```
+'**-y**' option means '**Yes**' and velocity out installation process. Question to ensure that user want to install that will be asked each time when we call **choco install**.
+```powershell
+Do you want to run the script?([Y]es/[N]o/[P]rint)
+```
+
 Right now with last version **v0.26.0** we have an issue - [Error with pre-create check. When Creating a new docker machine](https://github.com/docker/machine/issues/4452)
 Just rollback to **v0.25.0** with _--allow-downgrade_
 ```powershell
