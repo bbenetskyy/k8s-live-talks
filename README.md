@@ -146,29 +146,22 @@ You can stop **Minikube** by simple stop **command**
  #Stopping local Kubernetes cluster...
  #Machine stopped.
 ```
+If you get some errors connected with machine state, you can **delete** it.
+```powershell
+ minikube delete
+ #output
+ #Deleting local Kubernetes cluster...
+ #Machine deleted.
+```
 # Dashboard
 From this moment we could see **Minikube Dashboard**, right now it's empty. But later here we will see all details about internal live of our **K8s**.
 
 ```powershell
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-#output
-#secret "kubernetes-dashboard-certs" created
-#serviceaccount "kubernetes-dashboard" created
-#role "kubernetes-dashboard-minimal" created
-#rolebinding "kubernetes-dashboard-minimal" created
-#deployment "kubernetes-dashboard" created
-#service "kubernetes-dashboard" created
 minikube addons enable dashboard
 #output
 #dashboard was successfully enabled
 ```
-In separate **PowerShell** window run code for dashboard proxy
-```powershell
-kubectl proxy --port=7845
-#output
-#Starting to serve on 127.0.0.1:7845
-```
-If you will open your browser and enter [127.0.0.1:7845](http://127.0.0.1:7845/) you will find list of acceptable Api Requests.
 
-You could try **/logs** or **/healthz/ping** for example.
+If you will open your browser and enter [10.10.33.235:30000](http://10.10.33.235:30000/#!/overview?namespace=default) you will find list of acceptable Api Requests.
+
 
