@@ -165,3 +165,76 @@ minikube addons enable dashboard
 If you will open your browser and enter [10.10.33.235:30000](http://10.10.33.235:30000/#!/overview?namespace=default) you will find list of acceptable Api Requests.
 
 
+# Run Simple First Pod
+
+Here is simplest first pod definition in our live
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-pod
+spec:
+  containers:
+  - name: hello-ctr
+    image: nigelpoulton/pluralsight-docker-ci:latest
+    ports:
+    - containerPort: 8080
+```
+Just save it for exaple as **[pod_first.yml](https://github.com/bbenetskyy/k8s-live-talks/blob/master/pod_first.yml)** file.
+And start new pod from **PowerShell**
+```powershell
+kubectl create -f pod_first.yml
+#output
+#pod "hello-pod" created
+```
+Not we could check is it true that pod getting created
+```powershell
+kubectl get pods
+#output
+#NAME        READY     STATUS    RESTARTS   AGE
+#hello-pod   1/1       Running   0          1h
+```
+You see all nodes in default namespace. You could specify namespace or an actual node
+```powershell
+kubectl get pods/hello-pod
+#output
+#NAME        READY     STATUS    RESTARTS   AGE
+#hello-pod   1/1       Running   0          1h
+```
+Also if you need you could see all pods in a system
+```powershell
+kubectl get pods --all-namespaces
+#output
+#NAMESPACE     NAME                                    READY     STATUS    RESTARTS   AGE
+#default       hello-pod                               1/1       Running   0          1h
+#kube-system   kube-dns-86f4d74b45-bj8pb               3/3       Running   11         15d
+#...
+```
+More detailed information about statuses and processing during creation you could see whe describe pods
+```powershell
+kubectl describe pods
+#output
+#Name:         hello-pod
+#Namespace:    default
+#Node:         minikube/10.10.33.55
+#...
+#Status:       Running
+#IP:           172.17.0.4
+#...
+#Containers:
+#  hello-ctr:
+#    Container ID:   docker://8e47bc06734be1955843afb90c6ac209911abb5ff889e927151b83f130bea255
+#    Image:          nigelpoulton/pluralsight-docker-ci:latest
+#...
+```
+ Where Status - show real **legal** pod status.
+ Where Containers=>hello-ctr=>State - container state
+ And Containers=>hello-ctr=>State=>Reason - reason  of container state,
+
+ So the pod status we were getting was actually the **container state**, not the **pod state**.
+
+# Replication Controller
+
+We won't work in real live with a Pods but with with higher level abstraction names **Replication Controller**.
+Replication Controller creates a pod and could make his replication and in reconciliation loop.
+K8s picks up the hard work, runs a watch loop in the background and makes sure that the actual state of the cluster always matches your desired state.
