@@ -236,5 +236,81 @@ kubectl describe pods
 # Replication Controller
 
 We won't work in real live with a Pods but with with higher level abstraction names **Replication Controller**.
-Replication Controller creates a pod and could make his replication and in reconciliation loop.
+Replication Controller, later RC only, creates a pod and could make his replication and in reconciliation loop.
 K8s picks up the hard work, runs a watch loop in the background and makes sure that the actual state of the cluster always matches your desired state.
+
+Before starting with RC, remove created pod
+```powershell
+kubectl delete pods hello-pod
+#output
+#pod "hello-pod" deleted
+```
+Now create new pod by using RC. Here you could see definition of **[rc_first.yml](https://github.com/bbenetskyy/k8s-live-talks/blob/master/rc_first.yml)**
+```yml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: hello-rc
+spec:
+  replicas: 10
+  selector:
+    app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello-pod
+        image: nigelpoulton/pluralsight-docker-ci:latest
+        ports:
+        - containerPort: 8080
+```
+Create RC from that file. And check if Pods and RC was created
+```powershell
+kubectl create -f rc_first.yml
+#output
+#replicationcontroller "hello-rc" created
+kubectl get pod
+#output
+#NAME             READY     STATUS              RESTARTS   AGE
+#hello-rc-2q7dn   0/1       ContainerCreating   0          8s
+#hello-rc-58hnl   1/1       Running             0          8s
+#hello-rc-blhdv   0/1       ContainerCreating   0          8s
+#hello-rc-bwnwb   0/1       ContainerCreating   0          8s
+#hello-rc-bx8md   0/1       ContainerCreating   0          8s
+#hello-rc-k5z8d   1/1       Running             0          8s
+#hello-rc-kttzs   0/1       ContainerCreating   0          8s
+...
+kubectl get rc
+#output
+#NAME       DESIRED   CURRENT   READY     AGE
+#hello-rc   10        10        7         17s
+kubectl describe rc
+#output
+#Name:         hello-rc
+#Namespace:    default
+#Selector:     app=hello-world
+#...
+# Type    Reason            Age   From                    Message
+#  ----    ------            ----  ----                    -------
+#  Normal  SuccessfulCreate  30s   replication-controller  Created pod: hello-rc-2q7dn
+#  Normal  SuccessfulCreate  30s   replication-controller  Created pod: hello-rc-58hnl
+#  Normal  SuccessfulCreate  30s   replication-controller  Created pod: hello-rc-z6vfn
+#...
+```
+You can see that RC create and run for us 10 Pods instances with one container in each. Also at detailed description of rc we could check that it's monitoring described count of Pods.
+
+Let's change **replicas** to 20 for example and apply our changes for running k8s RC.
+```powershell
+kubectl apply -f rc_first.yml
+#output
+#Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+#replicationcontroller "hello-rc" configured
+kubectl get rc -o wide
+#output
+#NAME       DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                      SELECTOR
+#hello-rc   20        20        16        7m        hello-pod    nigelpoulton/pluralsight-docker-ci:latest   app=hello-world
+```
+*_**-o wide** just provide Containers, Images and Selector columns to output_
+We just add to 10 existed new 10 Pods by changing described property by running RC and K8s take all work for changes by himself.
