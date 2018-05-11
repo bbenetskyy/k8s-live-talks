@@ -1,6 +1,8 @@
 # k8s-live-talks
 Simple K8s Demo project
 
+### IMAGE DEMO OF THEORY ###
+
 # Installing.
 
 You could download and install **minikube** from [Minikube Releases](https://github.com/kubernetes/minikube/releases) or by command at **PowerShell**.
@@ -167,6 +169,7 @@ minikube addons enable dashboard
 
 If you will open your browser and enter [10.10.33.235:30000](http://10.10.33.235:30000/#!/overview?namespace=default) you will find list of acceptable Api Requests.
 
+### IMAGE DEMO OF PODS IN K8S ###
 
 # Run Simple First Pod
 
@@ -237,6 +240,8 @@ kubectl describe pods
  And Containers=>hello-ctr=>State=>Reason - reason  of container state,
 
  So the pod status we were getting was actually the **container state**, not the **pod state**.
+
+### IMAGE DEMO OF RC IN K8S ###
 
 # Replication Controller
 
@@ -323,6 +328,8 @@ _***-o wide** just provide Containers, Images and Selector columns to output_
 
 We just add to 10 existed new 10 Pods by changing described property by running RC and K8s take all work for changes by himself.
 
+### IMAGE DEMO OF KS IN K8S ###
+
 #K8s Services
  Services are needed to see our pods in out world. If you will try to get your pods by his IP address with exposed port(8080 in our).
 
@@ -406,3 +413,24 @@ kubectl describe svc hello-svc
 ```
 *_we could specify port by adding nodePort to YAML_
 
+Now we could check that old KS port is closed but newly created is available for us)))
+
+As summary for KS we should remember that after creating KS, K8s create endpoint and check if take care of all Pods by his labels. We could ensure about it by checking al KS listening addresses.
+```powershell
+kubectl describe ep hello-svc
+#output
+#Name:         hello-svc
+#Namespace:    default
+#Labels:       app=hello-world
+#Annotations:  <none>
+#Subsets:
+#  Addresses:          172.17.0.10,172.17.0.11,172.17.0.12,172.17.0.13,172.17.0.14,172.17.0.15,172.17.0.16,172.17.0.17,172.17.0.18,172.17.0.19,172.17.0.20,172.17.0.21,172.17.0.22,172.17.0.23,172.17.0.3,172.17.0.5,172.17.0.6,172.17.0.7,172.17.0.8,172.17.0.9
+#  NotReadyAddresses:  <none>
+#  Ports:
+#    Name     Port  Protocol
+#    ----     ----  --------
+#    <unset>  8080  TCP
+
+#Events:  <none>
+```
+### IMAGE DEMO WITH LABELS ###
