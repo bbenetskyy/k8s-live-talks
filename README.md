@@ -10,6 +10,7 @@ Run **PowerShell** as Administrator.
 At **PowerShell** enter we will enter all code.
 
 Now let's install **choco**.
+
 You can find updated information about installation at [Chocolatey](https://chocolatey.org/install)
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
@@ -55,6 +56,7 @@ Do you want to run the script?([Y]es/[N]o/[P]rint)
 ```
 
 Right now with last version **v0.26.0** we have an issue - [Error with pre-create check. When Creating a new docker machine](https://github.com/docker/machine/issues/4452)
+
 Just rollback to **v0.25.0** with _--allow-downgrade_
 ```powershell
 choco install minikube --version 0.25.0
@@ -96,6 +98,7 @@ Find existing network adapters by running the **Get-NetAdapter**. Make a note of
  #VirtualBox Host-Only N... VirtualBox Host-Only Ethernet Adapter         2 Up
 ```
 Hyper-V is built into Windows as an optional feature - there is no Hyper-V download or installable component. There are several ways to enable the built-in Hyper-V role.
+
 We will use PowerShell for it.
 ```powershell
  Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
@@ -228,7 +231,9 @@ kubectl describe pods
 #...
 ```
  Where Status - show real **legal** pod status.
+
  Where Containers=>hello-ctr=>State - container state
+ 
  And Containers=>hello-ctr=>State=>Reason - reason  of container state,
 
  So the pod status we were getting was actually the **container state**, not the **pod state**.
@@ -236,7 +241,9 @@ kubectl describe pods
 # Replication Controller
 
 We won't work in real live with a Pods but with with higher level abstraction names **Replication Controller**.
+
 Replication Controller, later RC only, creates a pod and could make his replication and in reconciliation loop.
+
 K8s picks up the hard work, runs a watch loop in the background and makes sure that the actual state of the cluster always matches your desired state.
 
 Before starting with RC, remove created pod
@@ -312,5 +319,90 @@ kubectl get rc -o wide
 #NAME       DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                      SELECTOR
 #hello-rc   20        20        16        7m        hello-pod    nigelpoulton/pluralsight-docker-ci:latest   app=hello-world
 ```
-*_**-o wide** just provide Containers, Images and Selector columns to output_
+_***-o wide** just provide Containers, Images and Selector columns to output_
+
 We just add to 10 existed new 10 Pods by changing described property by running RC and K8s take all work for changes by himself.
+
+#K8s Services
+ Services are needed to see our pods in out world. If you will try to get your pods by his IP address with exposed port(8080 in our).
+
+ You will get nothing!
+ 
+ We need to start Kubernates Service, later just **KS**, to make our containers visible from Pods. During creating we will set service name **--name=hello-svc**, targeting port **--target-port=8080** and service type **--type=NodePort**
+```powershell
+kubectl expose rc hello-rc --name=hello-svc --target-port=8080 --type=NodePort
+#output
+#service "hello-svc" exposed
+ kubectl describe svc hello-svc
+#output
+#Name:                     hello-svc
+#Namespace:                default
+#Labels:                   app=hello-world
+#...
+#Type:                     NodePort
+#IP:                       10.101.166.184
+#Port:                     <unset>  8080/TCP
+#TargetPort:               8080/TCP
+#NodePort:                 <unset>  31236/TCP
+#...
+```
+**10.101.166.184** - service IP;
+
+**31236/TCP** - port that we can access it on; Service ports are going to be between 30000 and 32767;
+
+Now let's make KS correctly via YAML script. Firstly just kill existed KS instance
+```powershell
+kubectl delete svc hello-svc
+#output
+#service "hello-svc" deleted
+```
+And now create a **[svc.yml file](https://github.com/bbenetskyy/k8s-live-talks/blob/master/svc.yml)**.
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-svc
+  labels:
+    app: hello-world
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    app: hello-world
+```
+Before run it let's focus on **ServiceType**. It could be
+* **ClusterIP** - stable internal cluster IP, that is only make the service available to other nodes in the cluster.
+* **NodePort** - exposes the app outside of the cluster by adding a cluster-wide TCP of UDP port on top of **ClusterIP**.
+* **LoadBalancer** - integrates **NodePort** with cloud-based load balancers.
+
+Now we know more about that we a doing so let's run KS configuration
+```powershell
+ kubectl create -f svc.yml
+#output
+#service "hello-svc" created
+```
+And basic checking that all going fine
+```powershell
+kubectl get svc
+#output
+#NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+#hello-svc    NodePort    10.97.177.177   <none>        8080:31656/TCP   1m
+#kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP          17d
+kubectl describe svc hello-svc
+#output
+#Name:                     hello-svc
+#Namespace:                default
+#Labels:                   app=hello-world
+#Annotations:              <none>
+#Selector:                 app=hello-world
+#Type:                     NodePort
+#IP:                       10.97.177.177
+#Port:                     <unset>  8080/TCP
+#TargetPort:               8080/TCP
+#NodePort:                 <unset>  31656/TCP
+#...
+```
+*_we could specify port by adding nodePort to YAML_
+
