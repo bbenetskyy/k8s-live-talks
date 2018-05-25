@@ -13,6 +13,6 @@ spec:
     spec:
       containers:
       - name: hello-pod
-        image: nigelpoulton/pluralsight-docker-ci:latest
+        image: bbenetskyy/k8s-python-api:first
         ports:
-        - containerPort: 8080
+        - containerPort: 80

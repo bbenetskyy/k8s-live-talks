@@ -182,9 +182,9 @@ metadata:
 spec:
   containers:
   - name: hello-ctr
-    image: nigelpoulton/pluralsight-docker-ci:latest
+    image: bbenetskyy/k8s-python-api:first
     ports:
-    - containerPort: 8080
+    - containerPort: 80
 ```
 Just save it for exaple as **[pod_first.yml](https://github.com/bbenetskyy/k8s-live-talks/blob/master/pod_first.yml)** file.
 And start new pod from **PowerShell**
@@ -230,7 +230,7 @@ kubectl describe pods
 #Containers:
 #  hello-ctr:
 #    Container ID:   docker://8e47bc06734be1955843afb90c6ac209911abb5ff889e927151b83f130bea255
-#    Image:          nigelpoulton/pluralsight-docker-ci:latest
+#    Image:          bbenetskyy/k8s-python-api:first
 #...
 ```
  Where Status - show real **legal** pod status.
@@ -274,9 +274,9 @@ spec:
     spec:
       containers:
       - name: hello-pod
-        image: nigelpoulton/pluralsight-docker-ci:latest
+        image: bbenetskyy/k8s-python-api:first
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 ```
 Create RC from that file. And check if Pods and RC was created
 ```powershell
@@ -322,7 +322,7 @@ kubectl apply -f rc_first.yml
 kubectl get rc -o wide
 #output
 #NAME       DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                      SELECTOR
-#hello-rc   20        20        16        7m        hello-pod    nigelpoulton/pluralsight-docker-ci:latest   app=hello-world
+#hello-rc   20        20        16        7m        hello-pod    bbenetskyy/k8s-python-api:first   app=hello-world
 ```
 _***-o wide** just provide Containers, Images and Selector columns to output_
 
@@ -331,13 +331,13 @@ We just add to 10 existed new 10 Pods by changing described property by running 
 ### IMAGE DEMO OF KS IN K8S ###
 
 #K8s Services
- Services are needed to see our pods in out world. If you will try to get your pods by his IP address with exposed port(8080 in our).
+ Services are needed to see our pods in out world. If you will try to get your pods by his IP address with exposed port(80 in our).
 
  You will get nothing!
  
- We need to start Kubernates Service, later just **KS**, to make our containers visible from Pods. During creating we will set service name **--name=hello-svc**, targeting port **--target-port=8080** and service type **--type=NodePort**
+ We need to start Kubernates Service, later just **KS**, to make our containers visible from Pods. During creating we will set service name **--name=hello-svc**, targeting port **--target-port=80** and service type **--type=NodePort**
 ```powershell
-kubectl expose rc hello-rc --name=hello-svc --target-port=8080 --type=NodePort
+kubectl expose rc hello-rc --name=hello-svc --target-port=80 --type=NodePort
 #output
 #service "hello-svc" exposed
  kubectl describe svc hello-svc
@@ -348,12 +348,12 @@ kubectl expose rc hello-rc --name=hello-svc --target-port=8080 --type=NodePort
 #...
 #Type:                     NodePort
 #IP:                       10.101.166.184
-#Port:                     <unset>  8080/TCP
-#TargetPort:               8080/TCP
+#Port:                     <unset>  80/TCP
+#TargetPort:               80/TCP
 #NodePort:                 <unset>  31236/TCP
 #...
 ```
-**10.101.166.184** - service IP;
+**10.101.166.184** - service IP; same as minukube IP;
 
 **31236/TCP** - port that we can access it on; Service ports are going to be between 30000 and 32767;
 
@@ -374,7 +374,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 8080
+  - port: 80
     protocol: TCP
   selector:
     app: hello-world
@@ -395,7 +395,7 @@ And basic checking that all going fine
 kubectl get svc
 #output
 #NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-#hello-svc    NodePort    10.97.177.177   <none>        8080:31656/TCP   1m
+#hello-svc    NodePort    10.97.177.177   <none>        80:31656/TCP   1m
 #kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP          17d
 kubectl describe svc hello-svc
 #output
@@ -406,8 +406,8 @@ kubectl describe svc hello-svc
 #Selector:                 app=hello-world
 #Type:                     NodePort
 #IP:                       10.97.177.177
-#Port:                     <unset>  8080/TCP
-#TargetPort:               8080/TCP
+#Port:                     <unset>  80/TCP
+#TargetPort:               80/TCP
 #NodePort:                 <unset>  31656/TCP
 #...
 ```
@@ -429,7 +429,7 @@ kubectl describe ep hello-svc
 #  Ports:
 #    Name     Port  Protocol
 #    ----     ----  --------
-#    <unset>  8080  TCP
+#    <unset>  80  TCP
 
 #Events:  <none>
 ```
@@ -465,8 +465,8 @@ Annotations:              <none>
 Selector:                 app=hello-world
 Type:                     NodePort
 IP:                       10.97.177.177
-Port:                     <unset>  8080/TCP
-TargetPort:               8080/TCP
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
 NodePort:                 <unset>  31656/TCP
 Endpoints:                <none>
 Session Affinity:         None
@@ -493,8 +493,8 @@ Pod Template:
   Labels:  app=hellow-world
   Containers:
    hello-pod:
-    Image:        nigelpoulton/pluralsight-docker-ci:latest
-    Port:         8080/TCP
+    Image:        bbenetskyy/k8s-python-api:first
+    Port:         80/TCP
     Host Port:    0/TCP
     Environment:  <none>
     Mounts:       <none>
@@ -531,8 +531,8 @@ Pod Template:
            pod-template-hash=1556796565
   Containers:
    hello-pod:
-    Image:        nigelpoulton/pluralsight-docker-ci:latest
-    Port:         8080/TCP
+    Image:        bbenetskyy/k8s-python-api:first
+    Port:         80/TCP
     Host Port:    0/TCP
     Environment:  <none>
     Mounts:       <none>
@@ -599,7 +599,7 @@ Pod Template:
   Containers:
    hello-pod:
     Image:        nigelpoulton/pluralsight-docker-ci:edge
-    Port:         8080/TCP
+    Port:         80/TCP
     Host Port:    0/TCP
     Environment:  <none>
     Mounts:       <none>
@@ -656,4 +656,6 @@ Waiting for rollout to finish: 9 of 10 updated replicas are available...
 deployment "hello-deploy" successfully rolled out
 
 ### EXPLAE WITHOUT RECORD FLAG ###
+
+https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/
 

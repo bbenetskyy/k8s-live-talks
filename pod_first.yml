@@ -5,6 +5,6 @@ metadata:
 spec:
   containers:
   - name: hello-ctr
-    image: nigelpoulton/pluralsight-docker-ci:latest
+    image: bbenetskyy/k8s-python-api:first
     ports:
-    - containerPort: 8080
+    - containerPort: 80
