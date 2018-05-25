@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: hello-pod
-        image: bbenetskyy/k8s-python-api:first
+        image: bbenetskyy/k8s-python-api:second
         ports:
         - containerPort: 80
