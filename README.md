@@ -41,9 +41,9 @@ From that list we need to install
 * Minikube
 * kubernetes-cli*
 * kubernetes-node
-* ubernetes-kompos
+* kubernetes-kompos
 
-*Please note that package **kubernetes-cli** will be installed with **Minilube**.
+*Please note that package **kubernetes-cli** will be installed with **Minikube**.
 
 But we will start by installing **docker** as first package:
 ```powershell
@@ -186,7 +186,7 @@ spec:
     ports:
     - containerPort: 80
 ```
-Just save it for exaple as **[pod_first.yml](https://github.com/bbenetskyy/k8s-live-talks/blob/master/pod_first.yml)** file.
+Just save it for example as **[pod_first.yml](https://github.com/bbenetskyy/k8s-live-talks/blob/master/pod_first.yml)** file.
 And start new pod from **PowerShell**
 ```powershell
 kubectl create -f pod_first.yml
@@ -353,7 +353,7 @@ kubectl expose rc hello-rc --name=hello-svc --target-port=80 --type=NodePort
 #NodePort:                 <unset>  31236/TCP
 #...
 ```
-**10.101.166.184** - service IP; same as minukube IP;
+**10.101.166.184** - service IP; same as minikube IP;
 
 **31236/TCP** - port that we can access it on; Service ports are going to be between 30000 and 32767;
 
@@ -643,86 +643,88 @@ kubectl rollout history deployment hello-deploy
 
 **All time use _--record=true_ flag**
 
- k get rs
-NAME                      DESIRED   CURRENT   READY     AGE
-hello-deploy-599bcfb9b9   0         0         0         11m
-hello-deploy-bc445bff9    10        10        10        3m
+Some additional information about K8s inside before roll back
+```powershell
+kubectl get rs
+#output
+#NAME                      DESIRED   CURRENT   READY     AGE
+#hello-deploy-599bcfb9b9   0         0         0         11m
+#hello-deploy-bc445bff9    10        10        10        3m
 
-k describe deploy hello-deploy
-Name:                   hello-deploy
-Namespace:              default
-CreationTimestamp:      Tue, 15 May 2018 12:50:55 +0200
-Labels:                 app=hello-world
-Annotations:            deployment.kubernetes.io/revision=2
-                        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotations":{"kubernetes.io/change-cause":"kubectl.exe apply --filename=deploy_two...
-                        kubernetes.io/change-cause=kubectl.exe apply --filename=deploy_two.yml --record=true
-Selector:               app=hello-world
-Replicas:               10 desired | 10 updated | 10 total | 10 available | 0 unavailable
-StrategyType:           RollingUpdate
-MinReadySeconds:        10
-RollingUpdateStrategy:  1 max unavailable, 1 max surge
-Pod Template:
-  Labels:  app=hello-world
-  Containers:
-   hello-pod:
-    Image:        nigelpoulton/pluralsight-docker-ci:edge
-    Port:         80/TCP
-    Host Port:    0/TCP
-    Environment:  <none>
-    Mounts:       <none>
-  Volumes:        <none>
-Conditions:
-  Type           Status  Reason
-  ----           ------  ------
-  Available      True    MinimumReplicasAvailable
-  Progressing    True    NewReplicaSetAvailable
-OldReplicaSets:  <none>
-NewReplicaSet:   hello-deploy-bc445bff9 (10/10 replicas created)
-Events:
-  Type    Reason             Age              From                   Message
-  ----    ------             ----             ----                   -------
-  Normal  ScalingReplicaSet  11m              deployment-controller  Scaled up replica set hello-deploy-599bcfb9b9 to 10
-  Normal  ScalingReplicaSet  3m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 1
-  Normal  ScalingReplicaSet  3m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 9
-  Normal  ScalingReplicaSet  3m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 2
-  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 7
-  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 4
-  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 6
-  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 5
-  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 5
-  Normal  ScalingReplicaSet  1m (x8 over 2m)  deployment-controller  (combined from similar events): Scaled down replica set hello-deploy-599bcfb9b9 to 0
+kubectl describe deploy hello-deploy
+#output
+#Name:                   hello-deploy
+#Namespace:              default
+#CreationTimestamp:      Tue, 15 May 2018 12:50:55 +0200
+#Labels:                 app=hello-world
+#Annotations:            deployment.kubernetes.io/revision=2
+#                        kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotations":{"kubernetes.io/change-cause":"kubectl.exe apply --filename=deploy_two...
+#                        kubernetes.io/change-cause=kubectl.exe apply --filename=deploy_two.yml --record=true
+#Selector:               app=hello-world
+#Replicas:               10 desired | 10 updated | 10 total | 10 available | 0 unavailable
+#StrategyType:           RollingUpdate
+#MinReadySeconds:        10
+#RollingUpdateStrategy:  1 max unavailable, 1 max surge
+#Pod Template:
+#  Labels:  app=hello-world
+#  Containers:
+#   hello-pod:
+#    Image:        bbenetskyy/k8s-python-api:second
+#    Port:         80/TCP
+#    Host Port:    0/TCP
+#    Environment:  <none>
+#    Mounts:       <none>
+#  Volumes:        <none>
+#Conditions:
+#  Type           Status  Reason
+#  ----           ------  ------
+#  Available      True    MinimumReplicasAvailable
+#  Progressing    True    NewReplicaSetAvailable
+#OldReplicaSets:  <none>
+#NewReplicaSet:   hello-deploy-bc445bff9 (10/10 replicas created)
+#Events:
+#  Type    Reason             Age              From                   Message
+#  ----    ------             ----             ----                   -------
+#  Normal  ScalingReplicaSet  11m              deployment-controller  Scaled up replica set hello-deploy-599bcfb9b9 to 10
+#  Normal  ScalingReplicaSet  3m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 1
+#  Normal  ScalingReplicaSet  3m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 9
+#  Normal  ScalingReplicaSet  3m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 2
+#  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 7
+#  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 4
+#  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 6
+#  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled up replica set hello-deploy-bc445bff9 to 5
+#  Normal  ScalingReplicaSet  2m               deployment-controller  Scaled down replica set hello-deploy-599bcfb9b9 to 5
+#  Normal  ScalingReplicaSet  1m (x8 over 2m)  deployment-controller  (combined from similar events): Scaled down replica set hello-deploy-599bcfb9b9 to 0
+```
+Ok, it's time to **rollout**. We will roll back to revision #1(get it from revision list)
+```powershell
+kubectl rollout undo deployment hello-deploy --to-revision=1
+#output
+#deployment.apps "hello-deploy"
 
-   k rollout undo deployment hello-deploy --to-revision=1
-deployment.apps "hello-deploy"
+kubectl get deploy
+#output
+#NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+#hello-deploy   10        11        2            10          13m
 
-k get deploy
-NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-hello-deploy   10        11        2            10          13m
+kubectl rollout status deployment hello-deploy
+#output
+#Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 7 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 7 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 8 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 8 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 1 old replicas are pending termination...
+#Waiting for rollout to finish: 1 old replicas are pending termination...
+#Waiting for rollout to finish: 1 old replicas are pending termination...
+#Waiting for rollout to finish: 9 of 10 updated replicas are available...
+#Waiting for rollout to finish: 9 of 10 updated replicas are available...
+#deployment "hello-deploy" successfully rolled out
+```
 
- k rollout status deployment hello-deploy
-Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 6 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 7 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 7 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 7 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 7 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 8 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 8 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 8 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 8 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 1 old replicas are pending termination...
-Waiting for rollout to finish: 1 old replicas are pending termination...
-Waiting for rollout to finish: 1 old replicas are pending termination...
-Waiting for rollout to finish: 1 old replicas are pending termination...
-Waiting for rollout to finish: 9 of 10 updated replicas are available...
-Waiting for rollout to finish: 9 of 10 updated replicas are available...
-deployment "hello-deploy" successfully rolled out
-
-### EXPLAE WITHOUT RECORD FLAG ###
+### EXAMPLE WITHOUT RECORD FLAG ###
 
 Useful links:
 
