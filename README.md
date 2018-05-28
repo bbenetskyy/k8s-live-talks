@@ -435,146 +435,213 @@ kubectl describe ep hello-svc
 ```
 ### IMAGE DEMO WITH LABELS ###
 
-kubectl delete rc hello-rc
-replicationcontroller "hello-rc" deleted
-PS C:\WINDOWS\system32> kubectl get pods
-NAME             READY     STATUS        RESTARTS   AGE
-hello-rc-2q7dn   0/1       Terminating   3          5d
-hello-rc-4dl6v   1/1       Terminating   3          5d
-hello-rc-5s46p   1/1       Terminating   3          5d
-hello-rc-7dm5l   0/1       Terminating   3          5d
-hello-rc-blhdv   0/1       Terminating   3          5d
-hello-rc-bwnwb   0/1       Terminating   3          5d
-hello-rc-bx8md   1/1       Terminating   3          5d
-hello-rc-g7hf7   0/1       Terminating   3          5d
-hello-rc-gzjpc   0/1       Terminating   3          5d
-hello-rc-k5z8d   1/1       Terminating   3          5d
-hello-rc-kttzs   1/1       Terminating   3          5d
-hello-rc-sk9rq   1/1       Terminating   3          5d
-hello-rc-vqhwv   0/1       Terminating   3          5d
-hello-rc-wtbdb   0/1       Terminating   3          5d
-hello-rc-xq7x8   1/1       Terminating   3          5d
-hello-rc-z6vfn   1/1       Terminating   3          5d
-hello-rc-zbthp   0/1       Terminating   3          5d
+# Deploys
 
- kubectl describe svc hello-svc
-Name:                     hello-svc
-Namespace:                default
-Labels:                   app=hello-world
-Annotations:              <none>
-Selector:                 app=hello-world
-Type:                     NodePort
-IP:                       10.97.177.177
-Port:                     <unset>  80/TCP
-TargetPort:               80/TCP
-NodePort:                 <unset>  31656/TCP
-Endpoints:                <none>
-Session Affinity:         None
-External Traffic Policy:  Cluster
-Events:                   <none>
+As usually before starting new Deploys with K8s Deployments we should kill worked RC. Want to mention that Deployment located on higher level than RC.
+
+```powershell
+kubectl delete rc hello-rc
+#output
+#replication controller "hello-rc" deleted
+kubectl get pods
+#output
+#NAME             READY     STATUS        RESTARTS   AGE
+#hello-rc-2q7dn   0/1       Terminating   3          5d
+#hello-rc-4dl6v   1/1       Terminating   3          5d
+#hello-rc-5s46p   1/1       Terminating   3          5d
+#hello-rc-7dm5l   0/1       Terminating   3          5d
+#hello-rc-blhdv   0/1       Terminating   3          5d
+#hello-rc-bwnwb   0/1       Terminating   3          5d
+#hello-rc-bx8md   1/1       Terminating   3          5d
+#hello-rc-g7hf7   0/1       Terminating   3          5d
+#hello-rc-gzjpc   0/1       Terminating   3          5d
+#hello-rc-k5z8d   1/1       Terminating   3          5d
+#hello-rc-kttzs   1/1       Terminating   3          5d
+#hello-rc-sk9rq   1/1       Terminating   3          5d
+#hello-rc-vqhwv   0/1       Terminating   3          5d
+#hello-rc-wtbdb   0/1       Terminating   3          5d
+#hello-rc-xq7x8   1/1       Terminating   3          5d
+#hello-rc-z6vfn   1/1       Terminating   3          5d
+#hello-rc-zbthp   0/1       Terminating   3          5d
+```
+Now we check that our KS still works:
+```powershell
+kubectl describe svc hello-svc
+#output
+#Name:                     hello-svc
+#Namespace:                default
+#Labels:                   app=hello-world
+#Annotations:              <none>
+#Selector:                 app=hello-world
+#Type:                     NodePort
+#IP:                       10.97.177.177
+#Port:                     <unset>  80/TCP
+#TargetPort:               80/TCP
+#NodePort:                 <unset>  31656/TCP
+#Endpoints:                <none>
+#Session Affinity:         None
+#External Traffic Policy:  Cluster
+#Events:                   <none>
+```
 
 ### CHECK ALL API VERSIONS MOST IMPORTANT IS DEPLOYMENT ###
 
-k create -f deploy.yml
-deployment.extensions "hello-deploy" created
+As in early we will define YAML Deployment declaration for **kubectl**.
 
- k describe deploy hello-deploy
-Name:                   hello-deploy
-Namespace:              default
-CreationTimestamp:      Tue, 15 May 2018 12:50:55 +0200
-Labels:                 app=hellow-world
-Annotations:            deployment.kubernetes.io/revision=1
-Selector:               app=hellow-world
-Replicas:               10 desired | 10 updated | 10 total | 10 available | 0 unavailable
-StrategyType:           RollingUpdate
-MinReadySeconds:        0
-RollingUpdateStrategy:  1 max unavailable, 1 max surge
-Pod Template:
-  Labels:  app=hellow-world
-  Containers:
-   hello-pod:
-    Image:        bbenetskyy/k8s-python-api:first
-    Port:         80/TCP
-    Host Port:    0/TCP
-    Environment:  <none>
-    Mounts:       <none>
-  Volumes:        <none>
-Conditions:
-  Type           Status  Reason
-  ----           ------  ------
-  Available      True    MinimumReplicasAvailable
-  Progressing    True    NewReplicaSetAvailable
-OldReplicaSets:  <none>
-NewReplicaSet:   hello-deploy-599bcfb9b9 (10/10 replicas created)
-Events:
-  Type    Reason             Age   From                   Message
-  ----    ------             ----  ----                   -------
-  Normal  ScalingReplicaSet  36s   deployment-controller  Scaled up replica set hello-deploy-599bcfb9b9 to 10
+Code for defining Deploy K8s we will locate at **[deploy.yml file](https://github.com/bbenetskyy/k8s-live-talks/blob/master/deploy.yml)**
+```yml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-deploy
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello-pod
+        image: bbenetskyy/k8s-python-api:first
+        ports:
+        - containerPort: 80
+```
+And create Deploy for K8s with **kubectl create** command:
+```powershell
+kubectl create -f deploy.yml
+#output
+#deployment.extensions "hello-deploy" created
 
-  k get rs
-NAME                      DESIRED   CURRENT   READY     AGE
-hello-deploy-599bcfb9b9   10        10        10        1m
-PS C:\Users\bbenetskyi\Desktop\k8s-live-talks> k describe rs
-Name:           hello-deploy-599bcfb9b9
-Namespace:      default
-Selector:       app=hellow-world,pod-template-hash=1556796565
-Labels:         app=hellow-world
-                pod-template-hash=1556796565
-Annotations:    deployment.kubernetes.io/desired-replicas=10
-                deployment.kubernetes.io/max-replicas=11
-                deployment.kubernetes.io/revision=1
-Controlled By:  Deployment/hello-deploy
-Replicas:       10 current / 10 desired
-Pods Status:    10 Running / 0 Waiting / 0 Succeeded / 0 Failed
-Pod Template:
-  Labels:  app=hellow-world
-           pod-template-hash=1556796565
-  Containers:
-   hello-pod:
-    Image:        bbenetskyy/k8s-python-api:first
-    Port:         80/TCP
-    Host Port:    0/TCP
-    Environment:  <none>
-    Mounts:       <none>
-  Volumes:        <none>
-Events:
-  Type    Reason            Age   From                   Message
-  ----    ------            ----  ----                   -------
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-d4nb4
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-88vfh
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-rjw4x
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-d7zmx
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-n8nm9
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-pwgp8
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-k6mlt
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-psd87
-  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-c95fz
-  Normal  SuccessfulCreate  1m    replicaset-controller  (combined from similar events): Created pod: hello-deploy-599bcfb9b9-p6fbv
+kubectl describe deploy hello-deploy
+#output
+#Name:                   hello-deploy
+#Namespace:              default
+#CreationTimestamp:      Tue, 15 May 2018 12:50:55 +0200
+#Labels:                 app=hello-world
+#Annotations:            deployment.kubernetes.io/revision=1
+#Selector:               app=hello-world
+#Replicas:               10 desired | 10 updated | 10 total | 10 available | 0 unavailable
+#StrategyType:           RollingUpdate
+#MinReadySeconds:        0
+#RollingUpdateStrategy:  1 max unavailable, 1 max surge
+#Pod Template:
+#  Labels:  app=hello-world
+#  Containers:
+#   hello-pod:
+#    Image:        bbenetskyy/k8s-python-api:first
+#    Port:         80/TCP
+#    Host Port:    0/TCP
+#    Environment:  <none>
+#    Mounts:       <none>
+#  Volumes:        <none>
+#Conditions:
+#  Type           Status  Reason
+#  ----           ------  ------
+#  Available      True    MinimumReplicasAvailable
+#  Progressing    True    NewReplicaSetAvailable
+#OldReplicaSets:  <none>
+#NewReplicaSet:   hello-deploy-599bcfb9b9 (10/10 replicas created)
+#Events:
+#  Type    Reason             Age   From                   Message
+#  ----    ------             ----  ----                   -------
+#  Normal  ScalingReplicaSet  36s   deployment-controller  Scaled up replica set hello-deploy-599bcfb9b9 to 10
 
-  **minReadySeconds - how much wait when complete this and move to other**
+kubectl get rs
+#output
+#NAME                      DESIRED   CURRENT   READY     AGE
+#hello-deploy-599bcfb9b9   10        10        10        1m
+
+kubectl describe rs
+#output
+#Name:           hello-deploy-599bcfb9b9
+#Namespace:      default
+#Selector:       app=hello-world,pod-template-hash=1556796565
+#Labels:         app=hello-world
+#                pod-template-hash=1556796565
+#Annotations:    deployment.kubernetes.io/desired-replicas=10
+#                deployment.kubernetes.io/max-replicas=11
+#                deployment.kubernetes.io/revision=1
+#Controlled By:  Deployment/hello-deploy
+#Replicas:       10 current / 10 desired
+#Pods Status:    10 Running / 0 Waiting / 0 Succeeded / 0 Failed
+#Pod Template:
+#  Labels:  app=hello-world
+#           pod-template-hash=1556796565
+#  Containers:
+#   hello-pod:
+#    Image:        bbenetskyy/k8s-python-api:first
+#    Port:         80/TCP
+#    Host Port:    0/TCP
+#    Environment:  <none>
+#    Mounts:       <none>
+#  Volumes:        <none>
+#Events:
+#  Type    Reason            Age   From                   Message
+#  ----    ------            ----  ----                   -------
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-d4nb4
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-88vfh
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-rjw4x
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-d7zmx
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-n8nm9
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-pwgp8
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-k6mlt
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-psd87
+#  Normal  SuccessfulCreate  1m    replicaset-controller  Created pod: hello-deploy-599bcfb9b9-c95fz
+#  Normal  SuccessfulCreate  1m    replicaset-controller  (combined from similar events): Created pod: hello-deploy-599bcfb9b9-p6fbv
+
+#  **minReadySeconds - how much wait when complete this and move to other**
+```
 
   ### SEARCH ALL STRATEGY TYPES ###
 
-  k apply -f deploy_two.yml --record
-Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
-deployment.extensions "hello-deploy" configured
+_Cool we have it! What's next???_
 
-k rollout status deployment hello-deploy
-Waiting for rollout to finish: 2 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 2 out of 10 new replicas have been updated...
-Waiting for rollout to finish: 2 out of 10 new replicas have been updated...
-PS C:\Users\bbenetskyi\Desktop\k8s-live-talks> k get deploy hello-deploy
-NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-hello-deploy   10        11        4            9           9m
+In next step we will see no-downtime update with K8s Deploy
+```powershell
+kubectl apply -f deploy_two.yml --record
+#output
+#Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+#deployment.extensions "hello-deploy" configured
+```
 
-k rollout history deployment hello-deploy
-deployments "hello-deploy"
-REVISION  CHANGE-CAUSE
-1         <none>
-2         kubectl.exe apply --filename=deploy_two.yml --record=true
+_Hmm, and what's change?_ 
 
-**is no record flat what revision 2 will be have none changes**
-**all time use --record=true flag**
+Lest check our deployment - **hello-deploy**
+
+```powershell
+kubectl rollout status deployment hello-deploy
+#output
+#Waiting for rollout to finish: 2 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 2 out of 10 new replicas have been updated...
+#Waiting for rollout to finish: 2 out of 10 new replicas have been updated...
+kubectl get deploy hello-deploy
+#output
+#NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+#hello-deploy   10        11        4            9           9m
+```
+
+Check it in your browser. You should see a new version of API
+
+### OUTPUT PAGE FROM BROWSER ###
+
+_Ok, we get new version. It works. But what if I want to roll back to previous one, what should I do?_
+
+You could simply roll back if you make deploy with flag **-f**, but if you don't use it K8s will not register you deployment changes.
+
+To check update history run next:
+```powershell
+kubectl rollout history deployment hello-deploy
+#output
+#deployments "hello-deploy"
+#REVISION  CHANGE-CAUSE
+#1         <none>
+#2         kubectl.exe apply --filename=deploy_two.yml --record=true
+```
+
+**One more time - _Is no record flat what revision 2 will be have none changes_**
+
+**All time use _--record=true_ flag**
 
  k get rs
 NAME                      DESIRED   CURRENT   READY     AGE
@@ -585,17 +652,17 @@ k describe deploy hello-deploy
 Name:                   hello-deploy
 Namespace:              default
 CreationTimestamp:      Tue, 15 May 2018 12:50:55 +0200
-Labels:                 app=hellow-world
+Labels:                 app=hello-world
 Annotations:            deployment.kubernetes.io/revision=2
                         kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"extensions/v1beta1","kind":"Deployment","metadata":{"annotations":{"kubernetes.io/change-cause":"kubectl.exe apply --filename=deploy_two...
                         kubernetes.io/change-cause=kubectl.exe apply --filename=deploy_two.yml --record=true
-Selector:               app=hellow-world
+Selector:               app=hello-world
 Replicas:               10 desired | 10 updated | 10 total | 10 available | 0 unavailable
 StrategyType:           RollingUpdate
 MinReadySeconds:        10
 RollingUpdateStrategy:  1 max unavailable, 1 max surge
 Pod Template:
-  Labels:  app=hellow-world
+  Labels:  app=hello-world
   Containers:
    hello-pod:
     Image:        nigelpoulton/pluralsight-docker-ci:edge
@@ -657,7 +724,10 @@ deployment "hello-deploy" successfully rolled out
 
 ### EXPLAE WITHOUT RECORD FLAG ###
 
-https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/
+Useful links:
+
+* [Running Web API using Docker and Kubernetes](https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/)
+* [Pluralsight - Getting Started Kubernetes](https://app.pluralsight.com/library/courses/getting-started-kubernetes/table-of-contents)
 
 
 

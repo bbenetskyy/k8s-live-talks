@@ -7,7 +7,7 @@ spec:
   template:
     metadata:
       labels:
-        app: hellow-world
+        app: hello-world
     spec:
       containers:
       - name: hello-pod
