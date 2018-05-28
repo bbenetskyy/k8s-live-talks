@@ -659,3 +659,5 @@ deployment "hello-deploy" successfully rolled out
 
 https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/
 
+
+
