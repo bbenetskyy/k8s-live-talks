@@ -3,6 +3,7 @@ kind: ReplicationController
 metadata:
   name: rc-v12
   labels:
+    type: demo
     app: v12
 spec:
   replicas: 5
@@ -11,6 +12,7 @@ spec:
   template:
     metadata:
       labels:
+        type: demo
         app: v12
     spec:
       containers:
