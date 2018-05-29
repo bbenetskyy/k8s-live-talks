@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rc-v12
+  labels:
+    app: v12
+spec:
+  replicas: 5
+  selector:
+    app: v12
+  template:
+    metadata:
+      labels:
+        app: v12
+    spec:
+      containers:
+      - name: hello-pod-v12
+        image: bbenetskyy/k8s-python-api:first
+        ports:
+        - containerPort: 80
