@@ -730,6 +730,6 @@ Useful links:
 
 * [Running Web API using Docker and Kubernetes](https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/)
 * [Pluralsight - Getting Started Kubernetes](https://app.pluralsight.com/library/courses/getting-started-kubernetes/table-of-contents)
-
+* [K8s Learning Scenario](https://www.katacoda.com/courses/kubernetes/add-additional-nodes-to-cluster)
 
 
