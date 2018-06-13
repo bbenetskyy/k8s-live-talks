@@ -733,5 +733,5 @@ Useful links:
 * [K8s Learning Scenario](https://www.katacoda.com/courses/kubernetes/add-additional-nodes-to-cluster)
 * [Docker Cheat-Sheet](https://github.com/wsargent/docker-cheat-sheet)
 * [Voting App with different components for Docker and Kubernetes](https://github.com/dockersamples/example-voting-app)
-
+* [Kubernates Sample Apps](https://github.com/nigelpoulton/k8s-sample-apps)
 
