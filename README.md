@@ -734,4 +734,5 @@ Useful links:
 * [Docker Cheat-Sheet](https://github.com/wsargent/docker-cheat-sheet)
 * [Voting App with different components for Docker and Kubernetes](https://github.com/dockersamples/example-voting-app)
 * [Kubernates Sample Apps](https://github.com/nigelpoulton/k8s-sample-apps)
+* [Google instruction for Kubernates Sample App](https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook)
 * [Kubernates Google Sample App](https://github.com/GoogleCloudPlatform/gifinator)
