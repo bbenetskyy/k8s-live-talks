@@ -737,6 +737,9 @@ Useful links:
 * [Kubernates Sample Apps](https://github.com/nigelpoulton/k8s-sample-apps)
 * [Google instruction for Kubernates Sample App](https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook)
 * [Kubernates Google Sample App](https://github.com/GoogleCloudPlatform/gifinator)
+* [Amdatu Kubernetes Scalerd](https://bitbucket.org/amdatulabs/amdatu-kubernetes-scalerd)
+* [Kubernetes Pods Livenes](https://kubernetes-v1-4.github.io/docs/user-guide/liveness/)
+
 
 Additional Commands:
 ```powershell
@@ -756,3 +759,5 @@ GitHub C# API Clients:
 * [Kubernetes C# Client](https://github.com/kubernetes-client/csharp)
 * [Kubernetes.DotNet](https://github.com/masroorhasan/Kubernetes.DotNet)
 * [Orleans Clustering Provider for Kubernetes](https://github.com/OrleansContrib/Orleans.Clustering.Kubernetes)
+
+**Don't store your Database in K8s!!!**
