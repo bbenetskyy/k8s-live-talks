@@ -728,6 +728,7 @@ kubectl rollout status deployment hello-deploy
 
 Useful links:
 
+* [Kubernetes in production](https://www.youtube.com/watch?v=-Ci4vd4rh4M)
 * [Running Web API using Docker and Kubernetes](https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/)
 * [Pluralsight - Getting Started Kubernetes](https://app.pluralsight.com/library/courses/getting-started-kubernetes/table-of-contents)
 * [K8s Learning Scenario](https://www.katacoda.com/courses/kubernetes/add-additional-nodes-to-cluster)
@@ -736,3 +737,16 @@ Useful links:
 * [Kubernates Sample Apps](https://github.com/nigelpoulton/k8s-sample-apps)
 * [Google instruction for Kubernates Sample App](https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook)
 * [Kubernates Google Sample App](https://github.com/GoogleCloudPlatform/gifinator)
+
+Additional Commands:
+```powershell
+kubectl expose deployment NAME --port 80 --type LoadBalancer
+kubectl scale deployment NAME --replicas 3
+kubectl create -f svc.yaml -f deployment.yaml
+
+spec:
+  type: LoadBalancer
+
+kubectl delete pod NAME  #for show how replicas works
+
+```
