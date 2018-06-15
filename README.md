@@ -750,3 +750,9 @@ spec:
 kubectl delete pod NAME  #for show how replicas works
 
 ```
+
+GitHub C# API Clients:
+
+* [Kubernetes C# Client](https://github.com/kubernetes-client/csharp)
+* [Kubernetes.DotNet](https://github.com/masroorhasan/Kubernetes.DotNet)
+* [Orleans Clustering Provider for Kubernetes](https://github.com/OrleansContrib/Orleans.Clustering.Kubernetes)
