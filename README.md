@@ -1,7 +1,7 @@
 # k8s-live-talks
 Simple K8s Demo project
 
-### IMAGE DEMO OF THEORY ###
+_**IMAGE DEMO OF THEORY**_
 
 # Installing.
 
@@ -169,7 +169,7 @@ minikube addons enable dashboard
 
 If you will open your browser and enter [10.10.33.235:30000](http://10.10.33.235:30000/#!/overview?namespace=default) you will find list of acceptable Api Requests.
 
-### IMAGE DEMO OF PODS IN K8S ###
+_**IMAGE DEMO OF PODS IN K8S**_
 
 # Run Simple First Pod
 
@@ -241,7 +241,7 @@ kubectl describe pods
 
  So the pod status we were getting was actually the **container state**, not the **pod state**.
 
-### IMAGE DEMO OF RC IN K8S ###
+_**IMAGE DEMO OF RC IN K8S**_
 
 # Replication Controller
 
@@ -328,7 +328,7 @@ _***-o wide** just provide Containers, Images and Selector columns to output_
 
 We just add to 10 existed new 10 Pods by changing described property by running RC and K8s take all work for changes by himself.
 
-### IMAGE DEMO OF KS IN K8S ###
+_**IMAGE DEMO OF KS IN K8S**_
 
 #K8s Services
  Services are needed to see our pods in out world. If you will try to get your pods by his IP address with exposed port(80 in our).
@@ -433,7 +433,7 @@ kubectl describe ep hello-svc
 
 #Events:  <none>
 ```
-### IMAGE DEMO WITH LABELS ###
+_**IMAGE DEMO WITH LABELS**_
 
 # Deploys
 
@@ -484,7 +484,7 @@ kubectl describe svc hello-svc
 #Events:                   <none>
 ```
 
-### CHECK ALL API VERSIONS MOST IMPORTANT IS DEPLOYMENT ###
+_**CHECK ALL API VERSIONS MOST IMPORTANT IS DEPLOYMENT**_
 
 As in early we will define YAML Deployment declaration for **kubectl**.
 
@@ -593,7 +593,7 @@ kubectl describe rs
 #  **minReadySeconds - how much wait when complete this and move to other**
 ```
 
-  ### SEARCH ALL STRATEGY TYPES ###
+  _**SEARCH ALL STRATEGY TYPES**_
 
 _Cool we have it! What's next???_
 
@@ -623,7 +623,7 @@ kubectl get deploy hello-deploy
 
 Check it in your browser. You should see a new version of API
 
-### OUTPUT PAGE FROM BROWSER ###
+_**OUTPUT PAGE FROM BROWSER**_
 
 _Ok, we get new version. It works. But what if I want to roll back to previous one, what should I do?_
 
@@ -724,7 +724,7 @@ kubectl rollout status deployment hello-deploy
 #deployment "hello-deploy" successfully rolled out
 ```
 
-### EXAMPLE WITHOUT RECORD FLAG ###
+_**EXAMPLE WITHOUT RECORD FLAG**_
 
 Useful links:
 
