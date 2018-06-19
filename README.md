@@ -729,6 +729,7 @@ _**EXAMPLE WITHOUT RECORD FLAG**_
 Useful links:
 
 * [Kubernetes in production](https://www.youtube.com/watch?v=-Ci4vd4rh4M)
+* [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
 * [Running Web API using Docker and Kubernetes](https://blogs.msdn.microsoft.com/najib/2017/05/27/web-api-with-docker-and-kubernetes/)
 * [Pluralsight - Getting Started Kubernetes](https://app.pluralsight.com/library/courses/getting-started-kubernetes/table-of-contents)
 * [K8s Learning Scenario](https://www.katacoda.com/courses/kubernetes/add-additional-nodes-to-cluster)
@@ -739,7 +740,6 @@ Useful links:
 * [Kubernates Google Sample App](https://github.com/GoogleCloudPlatform/gifinator)
 * [Amdatu Kubernetes Scalerd](https://bitbucket.org/amdatulabs/amdatu-kubernetes-scalerd)
 * [Kubernetes Pods Livenes](https://kubernetes-v1-4.github.io/docs/user-guide/liveness/)
-
 
 Additional Commands:
 ```powershell
