@@ -3,7 +3,14 @@ Simple K8s Demo project
 
 _**IMAGE DEMO OF THEORY**_
 
+# You Could install now it with Docker Edge!!!
+
+![Enabling K8s at Docker Edge](https://github.com/bbenetskyy/k8s-live-talks/blob/master/enable_kubernate.png)
+
+Next Installign and configuration of Hyper-V is not needed any more. After Install K8s via Docker Edge you could use it immedialy))))
+
 # Installing.
+
 
 You could download and install **minikube** from [Minikube Releases](https://github.com/kubernetes/minikube/releases) or by command at **PowerShell**.
 

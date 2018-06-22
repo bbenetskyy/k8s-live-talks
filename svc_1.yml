@@ -10,4 +10,4 @@ spec:
   - port: 80
     protocol: TCP
   selector:
-    type: v12
+    app: v12
